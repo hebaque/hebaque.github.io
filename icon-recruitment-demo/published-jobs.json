@@ -1,19 +1,5 @@
 {
-  "jobs": [
-    {
-      "id": "DEMO-VAC-32",
-      "tags": [],
-      "type": "Full-time",
-      "slots": 1,
-      "title": "ICON DEMO TEST — Site Project Coordinator",
-      "listed": true,
-      "project": "ICON Demonstration",
-      "summary": "Fictional ICON recruitment demo role supporting project coordination, site reporting and technical documentation. This is a demonstration only; applications are disabled.",
-      "location": "Egypt · Demo",
-      "department": "ENG",
-      "projectRef": "DEMO-ICON"
-    }
-  ],
+  "jobs": [],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
   "updated": "2026-10-21"
