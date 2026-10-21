@@ -1,0 +1,13 @@
+{
+  "mode": "demonstration",
+  "source": "Synthetic project staffing examples in ICON Recruitment development database, 21 October 2026",
+  "updated": "2026-10-21",
+  "jobs": [
+    {"id":"DEMO-PRJ-001-CE","title":"Civil Engineer","department":"Engineering","project":"Project Alpha","projectRef":"DEMO-PRJ-001","location":"Project site · Egypt","type":"Full-time","summary":"Support design coordination, construction quality and technical reporting.","slots":2,"listed":true,"tags":["Site engineering","Quality","Documentation"]},
+    {"id":"DEMO-PRJ-001-PM","title":"Project Manager","department":"Operations","project":"Project Alpha","projectRef":"DEMO-PRJ-001","location":"Project site · Egypt","type":"Full-time","summary":"Plan schedules, budgets, stakeholders and project delivery.","slots":2,"listed":true,"tags":["Planning","Stakeholders","Delivery"]},
+    {"id":"DEMO-PRJ-002-QS","title":"Quantity Surveyor","department":"Commercial","project":"Project Beta","projectRef":"DEMO-PRJ-002","location":"Project site · Egypt","type":"Full-time","summary":"Prepare quantity takeoffs, cost controls and progress reports.","slots":1,"listed":true,"tags":["Cost control","Quantity takeoffs","Reporting"]},
+    {"id":"DEMO-PRJ-002-SS","title":"Site Supervisor","department":"Operations","project":"Project Beta","projectRef":"DEMO-PRJ-002","location":"Project site · Egypt","type":"Full-time","summary":"Coordinate site operations, contractors and safety reporting.","slots":0,"listed":true,"tags":["Site management","Safety","Contractors"]},
+    {"id":"DEMO-PRJ-003-DS","title":"Data Specialist","department":"Engineering","project":"Project Gamma","projectRef":"DEMO-PRJ-003","location":"Project site · Egypt","type":"Temporary","summary":"Maintain operational reports, reconcile data and build dashboards.","slots":1,"listed":true,"tags":["Dashboards","Data validation","Reporting"]},
+    {"id":"DEMO-PRJ-003-PO","title":"Procurement Officer","department":"Procurement","project":"Project Gamma","projectRef":"DEMO-PRJ-003","location":"Project site · Egypt","type":"Full-time","summary":"Manage sourcing requests, supplier comparison and purchase follow-up.","slots":2,"listed":true,"tags":["Procurement","Suppliers","Sourcing"]}
+  ]
+}
