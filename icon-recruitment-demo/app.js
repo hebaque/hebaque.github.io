@@ -10,9 +10,40 @@ const FALLBACK_JOBS=[
  {id:"DEMO-PRJ-003-PO",title:"Procurement Officer",department:"Procurement",project:"Project Gamma",projectRef:"DEMO-PRJ-003",location:"Project site · Egypt",type:"Full-time",summary:"Manage sourcing requests, supplier comparison and purchase follow-up.",slots:2,tags:["Procurement","Suppliers","Sourcing"]}
 ];
 const els={grid:document.getElementById("job-grid"),empty:document.getElementById("empty-state"),search:document.getElementById("job-search"),department:document.getElementById("department-filter"),type:document.getElementById("type-filter"),results:document.getElementById("results-label"),total:document.getElementById("total-count"),details:document.getElementById("job-dialog"),detailsBody:document.getElementById("job-detail"),apply:document.getElementById("apply-dialog"),applyRole:document.getElementById("apply-role")};
-let jobs=FALLBACK_JOBS;
+let sampleJobs=FALLBACK_JOBS;
+let publishedJobs=[];
+let jobs=[...FALLBACK_JOBS];
 function escapeHtml(input){return String(input??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
-function stripUnsafeJobs(data){if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;return data.jobs.filter(j=>j&&typeof j.id==="string"&&typeof j.title==="string"&&typeof j.summary==="string"&&typeof j.department==="string"&&typeof j.project==="string"&&typeof j.slots==="number"&&j.id.startsWith("DEMO-")).slice(0,50);}
+function stripUnsafeJobs(data){
+ if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;
+ return data.jobs.filter(j=>j&&typeof j.id==="string"&&typeof j.title==="string"&&
+  typeof j.summary==="string"&&typeof j.department==="string"&&
+  typeof j.project==="string"&&typeof j.slots==="number"&&
+  j.id.startsWith("DEMO-")).slice(0,50);
+}
+function stripSafePublishedJobs(data){
+ if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;
+ return data.jobs.filter(j=>j && typeof j.id==="string" &&
+  /^DEMO-VAC-[1-9][0-9]*$/.test(j.id) &&
+  typeof j.title==="string"&&j.title.trim().length>0&&j.title.length<=150 &&
+  typeof j.department==="string"&&j.department.length<=80 &&
+  typeof j.type==="string"&&j.type.length<=60 &&
+  typeof j.summary==="string"&&j.summary.length>=30&&j.summary.length<=500)
+ .slice(0,50).map(j=>({
+  id:j.id,title:j.title,department:j.department,
+  project:"ICON Demonstration",projectRef:"DEMO-ICON",
+  location:"Egypt · Demo",type:j.type,summary:j.summary,
+  slots:1,listed:true,tags:[],
+ }));
+}
+function refreshJobs(){
+ const seen=new Set();
+ jobs=[...sampleJobs,...publishedJobs].filter(j=>{
+  if(seen.has(j.id))return false;
+  seen.add(j.id);return true;
+ });
+ updateDepartments();render();
+}
 function render(){
  const query=els.search.value.trim().toLocaleLowerCase();const dep=els.department.value;const type=els.type.value;
  const visible=jobs.filter(j=>(dep==="all"||j.department===dep)&&(type==="all"||j.type===type)&&[j.title,j.summary,j.department,j.project,j.id,...(j.tags||[])].some(s=>String(s).toLocaleLowerCase().includes(query)));
@@ -42,4 +73,13 @@ document.getElementById("year").textContent=String(new Date().getFullYear());
 updateDepartments();render();
 // Optional external JSON override ONLY when it explicitly declares demonstration
 // mode and DEMO identifiers. No candidate records or secrets are fetched.
-fetch("jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{const safe=stripUnsafeJobs(data);if(safe){jobs=safe;updateDepartments();render()}}).catch(()=>{});
+fetch("jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
+ const safe=stripUnsafeJobs(data);
+ if(safe){sampleJobs=safe;refreshJobs()}
+}).catch(()=>{});
+/* Separate, opt-in HR-approved sanitized feed. No direct Supabase data/API keys.
+   Zero jobs means no HR-authorized demo jobs, leaving synthetic sample examples visible. */
+fetch("published-jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
+ const safe=stripSafePublishedJobs(data);
+ if(safe){publishedJobs=safe;refreshJobs()}
+}).catch(()=>{});
