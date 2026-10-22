@@ -13,6 +13,16 @@ const els={grid:document.getElementById("job-grid"),empty:document.getElementByI
 let sampleJobs=FALLBACK_JOBS;
 let publishedJobs=[];
 let jobs=[...FALLBACK_JOBS];
+// This demonstration never transmits applicant details or offers live CV upload.
+// Actual secure Tally/n8n intake must be separately enabled after publication
+// authorization, live vacancy-ID checks, and the existing secure workflow cutover.
+const JOURNEY_STAGES=[
+ {title:"Signed candidate intake",description:"Tally collects an application and CV in the connected product. The secure n8n workflow validates the webhook signature and the submitted applicant fields."},
+ {title:"Private CV receipt and storage",description:"Supabase records the durable intake receipt, prevents duplicate processing, stores the CV privately, and verifies the uploaded file against its checksum."},
+ {title:"Vacancy-specific AI screening",description:"After a verified Open vacancy is identified, AI evaluates the CV against that vacancy's requirements. Existing candidates and applications are reused."},
+ {title:"Recruiter-controlled decisions",description:"The recruiter reviews the screening, shortlists candidates and manages interviews. The system supports decisions; it does not automatically hire anyone."}
+];
+let journeyStep=0;
 function escapeHtml(input){return String(input??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function stripUnsafeJobs(data){
  if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;
@@ -56,9 +66,34 @@ function render(){
 function updateDepartments(){const previouslySelected=els.department.value;const deps=[...new Set(jobs.map(j=>j.department))].sort();els.department.replaceChildren(new Option("All departments","all"));for(const d of deps){els.department.add(new Option(d,d))}els.department.value=deps.includes(previouslySelected)?previouslySelected:"all";}
 function showDetails(job){const filled=job.slots<=0;els.detailsBody.innerHTML=`<h2 id="dialog-title">${escapeHtml(job.title)}</h2><p class="dialog-subtitle">${escapeHtml(job.department)} · ${escapeHtml(job.type)} · ${escapeHtml(job.location)}</p><div class="dialog-facts"><div><small>Sample project</small><strong>${escapeHtml(job.project)}</strong></div><div><small>Staffing example</small><strong>${filled?"At approved headcount capacity":escapeHtml(String(job.slots))+" illustrative available slot"+(job.slots===1?"":"s")}</strong></div></div><h3>About this role</h3><p>${escapeHtml(job.summary)}</p><h3>Sample areas of focus</h3><div class="dialog-tags">${(job.tags||[]).map(t=>`<span>${escapeHtml(t)}</span>`).join("")}</div><div class="dialog-action"><button type="button" class="button ${filled?"button-muted":"button-primary"}" id="start-demo-apply" ${filled?"disabled":""}>${filled?"Sample role at capacity":"Preview candidate application →"}</button><button type="button" class="button button-muted" id="dialog-back">Back to positions</button></div><p class="dialog-disclaimer">This is a fictional demonstration. No vacancy is actually open or accepting applications.</p>`;
  els.detailsBody.querySelector("#dialog-back").addEventListener("click",()=>els.details.close());
- if(!filled){els.detailsBody.querySelector("#start-demo-apply").addEventListener("click",()=>{els.details.close();els.applyRole.textContent=`Selected demo position: ${job.title} · ${job.project}`;els.apply.showModal();document.body.classList.add("modal-open")})}
+ if(!filled){els.detailsBody.querySelector("#start-demo-apply").addEventListener("click",()=>openJourneyPreview(job))}
  els.details.showModal();document.body.classList.add("modal-open");
 }
+function showJourneyStage(){
+ const stage=JOURNEY_STAGES[journeyStep];
+ document.getElementById("journey-step-label").textContent=`STEP ${String(journeyStep+1).padStart(2,"0")} / 04`;
+ document.getElementById("journey-step-title").textContent=stage.title;
+ document.getElementById("journey-step-detail").textContent=stage.description;
+ document.getElementById("journey-progress").setAttribute("aria-valuenow",String(journeyStep+1));
+ document.getElementById("journey-progress-fill").style.width=`${(journeyStep+1)*25}%`;
+ document.getElementById("journey-previous").disabled=journeyStep===0;
+ document.getElementById("journey-next").disabled=journeyStep===JOURNEY_STAGES.length-1;
+ document.getElementById("journey-next").textContent=journeyStep===JOURNEY_STAGES.length-1?"Preview complete":"Next stage →";
+}
+function openJourneyPreview(job){
+ els.details.close();
+ els.applyRole.textContent=`Selected demo position: ${job.title} · ${job.project}`;
+ journeyStep=0;
+ showJourneyStage();
+ els.apply.showModal();
+ document.body.classList.add("modal-open");
+}
+document.getElementById("journey-previous").addEventListener("click",()=>{
+ if(journeyStep>0){journeyStep--;showJourneyStage();}
+});
+document.getElementById("journey-next").addEventListener("click",()=>{
+ if(journeyStep<JOURNEY_STAGES.length-1){journeyStep++;showJourneyStage();}
+});
 function reset(){els.search.value="";els.department.value="all";els.type.value="all";render()}
 for(const e of [els.search,els.department,els.type])e.addEventListener(e===els.search?"input":"change",render);
 document.getElementById("clear-filters").addEventListener("click",reset);document.getElementById("empty-reset").addEventListener("click",reset);
@@ -82,4 +117,29 @@ fetch("jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
 fetch("published-jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
  const safe=stripSafePublishedJobs(data);
  if(safe){publishedJobs=safe;refreshJobs()}
+}).catch(()=>{});
+// Optional presentation branding. Only local image assets and CSS hex colors
+// are accepted; this file cannot provide network targets or applicant intake.
+fetch("branding.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(brand=>{
+ if(brand?.mode!=="demonstration")return;
+ const label=(v,max)=>typeof v==="string"&&v.trim()&&v.length<=max?v.trim():null;
+ const name=label(brand.companyName,40),product=label(brand.productLabel,40);
+ if(name){const head=document.querySelector(".brand-type b");if(head)head.textContent=name;}
+ if(product){const sub=document.querySelector(".brand-type > span");if(sub)sub.textContent=product;}
+ const title=label(brand.browserTitle,90);if(title)document.title=title;
+ const theme=brand.theme??{};
+ for(const [name,value] of [
+  ["--brand-primary",theme.primary],
+  ["--brand-primary-hover",theme.primaryHover],
+  ["--brand-deep",theme.deep]
+ ]){
+  if(typeof value==="string"&&/^#[0-9a-fA-F]{6}$/.test(value))
+   document.documentElement.style.setProperty(name,value);
+ }
+ const logo=brand.logoPath;
+ if(typeof logo==="string"&&/^assets\/[A-Za-z0-9_-]+\.(?:png|webp|svg)$/.test(logo)){
+  for(const img of document.querySelectorAll(".brand img, .footer-brand img")){
+   img.src=logo;img.alt=(name||"Demonstration client")+" logo";
+  }
+ }
 }).catch(()=>{});
