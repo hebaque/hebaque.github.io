@@ -1,6 +1,20 @@
 {
-  "jobs": [],
+  "jobs": [
+    {
+      "id": "DEMO-VAC-35",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Civil Engineer",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "ICON Engineering is demonstrating recruitment for a Civil Engineer position supporting site coordination, technical documentation and construction quality. This is a fictional vacancy for testing the ICON Recruitment platform.",
+      "location": "Egypt · Demo",
+      "department": "ENG",
+      "projectRef": "DEMO-ICON"
+    }
+  ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-10-21"
+  "updated": "2026-10-25"
 }
