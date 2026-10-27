@@ -41,7 +41,7 @@ function stripSafePublishedJobs(data){
   typeof j.summary==="string"&&j.summary.length>=30&&j.summary.length<=500)
  .slice(0,50).map(j=>({
   id:j.id,title:j.title,department:j.department,
-  project:"ICON Engineering",projectRef:"DEMO-ICON",
+  project:"RHI",projectRef:"RHI",
   location:"Egypt",type:j.type,summary:j.summary.replace(/^ICON Engineering is demonstrating recruitment for a /i,"A ").replace(/\s*This is a fictional vacancy for testing the ICON Recruitment platform\.\s*/i,"").trim(),
   slots:1,listed:true,tags:[],
  }));
@@ -139,7 +139,7 @@ fetch("branding.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(brand
  const logo=brand.logoPath;
  if(typeof logo==="string"&&/^assets\/[A-Za-z0-9_-]+\.(?:png|webp|svg)$/.test(logo)){
   for(const img of document.querySelectorAll(".brand img, .footer-brand img")){
-   img.src=logo;img.alt=(name||"Demonstration client")+" logo";
+   img.src=logo;img.alt="RHI — Reliance Heavy Industries";
   }
  }
 }).catch(()=>{});
