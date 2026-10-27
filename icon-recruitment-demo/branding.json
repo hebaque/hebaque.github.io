@@ -2,8 +2,8 @@
   "mode": "demonstration",
   "companyName": "ICON",
   "productLabel": "RECRUITMENT",
-  "browserTitle": "Careers Demo | ICON Recruitment",
-  "logoPath": null,
+  "browserTitle": "ICON Careers | ICON Recruitment",
+  "logoPath": "assets/icon-official.png",
   "theme": {
     "primary": "#149eec",
     "primaryHover": "#0c86d5",

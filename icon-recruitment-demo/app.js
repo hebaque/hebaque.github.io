@@ -41,8 +41,8 @@ function stripSafePublishedJobs(data){
   typeof j.summary==="string"&&j.summary.length>=30&&j.summary.length<=500)
  .slice(0,50).map(j=>({
   id:j.id,title:j.title,department:j.department,
-  project:"ICON Demonstration",projectRef:"DEMO-ICON",
-  location:"Egypt · Demo",type:j.type,summary:j.summary,
+  project:"ICON Engineering",projectRef:"DEMO-ICON",
+  location:"Egypt",type:j.type,summary:j.summary.replace(/^ICON Engineering is demonstrating recruitment for a /i,"A ").replace(/\s*This is a fictional vacancy for testing the ICON Recruitment platform\.\s*/i,"").trim(),
   slots:1,listed:true,tags:[],
  }));
 }
@@ -57,14 +57,14 @@ function refreshJobs(){
 function render(){
  const query=els.search.value.trim().toLocaleLowerCase();const dep=els.department.value;const type=els.type.value;
  const visible=jobs.filter(j=>(dep==="all"||j.department===dep)&&(type==="all"||j.type===type)&&[j.title,j.summary,j.department,j.project,j.id,...(j.tags||[])].some(s=>String(s).toLocaleLowerCase().includes(query)));
- els.results.textContent=`Showing ${visible.length} of ${jobs.length} demonstration positions`;
+ els.results.textContent=`Showing ${visible.length} of ${jobs.length} positions`;
  els.total.textContent=String(jobs.length).padStart(2,"0");els.empty.hidden=visible.length!==0;
  els.grid.replaceChildren();const fragment=document.createDocumentFragment();
- for(const j of visible){const card=document.createElement("article");card.className="job-card"+(j.slots<=0?" is-filled":"");card.innerHTML=`<div class="job-top"><span class="job-reference">${escapeHtml(j.id)}</span><span class="job-pill ${j.slots<=0?"filled":""}">${j.slots<=0?"STAFFING AT CAPACITY":"DEMO ROLE"}</span></div><h3>${escapeHtml(j.title)}</h3><div class="job-meta"><span>${escapeHtml(j.department)}</span><span class="divider-dot" aria-hidden="true">●</span><span>${escapeHtml(j.type)}</span></div><p>${escapeHtml(j.summary)}</p><div class="job-bottom"><span>${escapeHtml(j.project)}</span><button type="button" data-job-id="${escapeHtml(j.id)}" aria-label="View ${escapeHtml(j.title)} demo role details">View details <span aria-hidden="true">→</span></button></div>`;fragment.append(card)}
+ for(const j of visible){const card=document.createElement("article");card.className="job-card"+(j.slots<=0?" is-filled":"");card.innerHTML=`<div class="job-top"><span class="job-reference">${escapeHtml(j.id.replace(/^DEMO-/, ""))}</span><span class="job-pill ${j.slots<=0?"filled":""}">${j.slots<=0?"STAFFING AT CAPACITY":"ROLE OVERVIEW"}</span></div><h3>${escapeHtml(j.title)}</h3><div class="job-meta"><span>${escapeHtml(j.department)}</span><span class="divider-dot" aria-hidden="true">●</span><span>${escapeHtml(j.type)}</span></div><p>${escapeHtml(j.summary)}</p><div class="job-bottom"><span>${escapeHtml(j.project)}</span><button type="button" data-job-id="${escapeHtml(j.id)}" aria-label="View ${escapeHtml(j.title)} role details">View details <span aria-hidden="true">→</span></button></div>`;fragment.append(card)}
  els.grid.append(fragment);
 }
 function updateDepartments(){const previouslySelected=els.department.value;const deps=[...new Set(jobs.map(j=>j.department))].sort();els.department.replaceChildren(new Option("All departments","all"));for(const d of deps){els.department.add(new Option(d,d))}els.department.value=deps.includes(previouslySelected)?previouslySelected:"all";}
-function showDetails(job){const filled=job.slots<=0;els.detailsBody.innerHTML=`<h2 id="dialog-title">${escapeHtml(job.title)}</h2><p class="dialog-subtitle">${escapeHtml(job.department)} · ${escapeHtml(job.type)} · ${escapeHtml(job.location)}</p><div class="dialog-facts"><div><small>Sample project</small><strong>${escapeHtml(job.project)}</strong></div><div><small>Staffing example</small><strong>${filled?"At approved headcount capacity":escapeHtml(String(job.slots))+" illustrative available slot"+(job.slots===1?"":"s")}</strong></div></div><h3>About this role</h3><p>${escapeHtml(job.summary)}</p><h3>Sample areas of focus</h3><div class="dialog-tags">${(job.tags||[]).map(t=>`<span>${escapeHtml(t)}</span>`).join("")}</div><div class="dialog-action"><button type="button" class="button ${filled?"button-muted":"button-primary"}" id="start-demo-apply" ${filled?"disabled":""}>${filled?"Sample role at capacity":"Preview candidate application →"}</button><button type="button" class="button button-muted" id="dialog-back">Back to positions</button></div><p class="dialog-disclaimer">This is a fictional demonstration. No vacancy is actually open or accepting applications.</p>`;
+function showDetails(job){const filled=job.slots<=0;els.detailsBody.innerHTML=`<h2 id="dialog-title">${escapeHtml(job.title)}</h2><p class="dialog-subtitle">${escapeHtml(job.department)} · ${escapeHtml(job.type)} · ${escapeHtml(job.location)}</p><div class="dialog-facts"><div><small>Project example</small><strong>${escapeHtml(job.project)}</strong></div><div><small>Headcount example</small><strong>${filled?"At approved headcount capacity":escapeHtml(String(job.slots))+" illustrative available slot"+(job.slots===1?"":"s")}</strong></div></div><h3>About this role</h3><p>${escapeHtml(job.summary)}</p><h3>Role focus</h3><div class="dialog-tags">${(job.tags||[]).map(t=>`<span>${escapeHtml(t)}</span>`).join("")}</div><div class="dialog-action"><button type="button" class="button ${filled?"button-muted":"button-primary"}" id="start-demo-apply" ${filled?"disabled":""}>${filled?"Position at capacity":"View application journey →"}</button><button type="button" class="button button-muted" id="dialog-back">Back to positions</button></div><p class="dialog-disclaimer">Applications are not currently being accepted through this page.</p>`;
  els.detailsBody.querySelector("#dialog-back").addEventListener("click",()=>els.details.close());
  if(!filled){els.detailsBody.querySelector("#start-demo-apply").addEventListener("click",()=>openJourneyPreview(job))}
  els.details.showModal();document.body.classList.add("modal-open");
@@ -82,7 +82,7 @@ function showJourneyStage(){
 }
 function openJourneyPreview(job){
  els.details.close();
- els.applyRole.textContent=`Selected demo position: ${job.title} · ${job.project}`;
+ els.applyRole.textContent=`Selected role: ${job.title} · ${job.project}`;
  journeyStep=0;
  showJourneyStage();
  els.apply.showModal();
