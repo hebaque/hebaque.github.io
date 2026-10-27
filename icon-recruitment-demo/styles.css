@@ -74,3 +74,19 @@ body{background:#fff}
  .hero-actions{gap:9px}
  .hero-actions .button{padding:14px 16px}
 }
+
+
+/* RHI reference design: diagonal architectural layers and depth */
+.hero{isolation:isolate;background:linear-gradient(116deg,#06192b 0%,#052843 58%,#06406a 100%);overflow:hidden}
+.hero::before{z-index:0;background:radial-gradient(ellipse at 77% 12%,rgba(55,162,228,.16),transparent 52%),linear-gradient(112deg,rgba(3,23,42,.18) 10%,rgba(3,23,42,.04) 85%)}
+.hero-photo{background-position:center 38%;background-size:cover;filter:saturate(1.06) contrast(1.05);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.25) 17%,rgba(0,0,0,.9) 42%,#000 64%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.25) 17%,rgba(0,0,0,.9) 42%,#000 64%)}
+.hero-photo::before{content:"";position:absolute;inset:0;background:linear-gradient(156deg,rgba(18,104,164,.04) 0%,rgba(10,68,112,.08) 37%,rgba(3,30,53,.52) 100%);clip-path:polygon(0 66%,100% 100%,100% 100%,0 100%);pointer-events:none}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(123deg,rgba(15,68,109,.30),rgba(2,31,58,.1) 60%);clip-path:polygon(0 0,23% 0,100% 100%,67% 100%);pointer-events:none}
+.hero::after{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(13deg,rgba(0,47,79,.56),rgba(7,51,82,.13) 44%,transparent 65%);clip-path:polygon(0 72%,100% 100%,100% 100%,0 100%);pointer-events:none}
+.hero-grid{z-index:1;opacity:.12}
+.hero-layout{z-index:2}
+.hero-copy{z-index:3}
+@media (max-width:760px){
+ .hero-photo{background-position:center 35%;opacity:.39}
+ .hero::after{opacity:.68}
+}
