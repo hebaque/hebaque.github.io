@@ -1,12 +1,12 @@
 {
   "mode": "demonstration",
-  "companyName": "ICON",
-  "productLabel": "RECRUITMENT",
-  "browserTitle": "ICON Careers | ICON Recruitment",
-  "logoPath": "assets/icon-official.png",
+  "companyName": "RHI",
+  "productLabel": "",
+  "browserTitle": "RHI Careers",
+  "logoPath": "assets/rhi-logo.png",
   "theme": {
     "primary": "#149eec",
-    "primaryHover": "#0c86d5",
+    "primaryHover": "#0b8bda",
     "deep": "#071c2f"
   }
 }
