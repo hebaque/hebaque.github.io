@@ -104,7 +104,7 @@ document.getElementById("close-dialog").addEventListener("click",closeDetails);
 document.getElementById("close-apply").addEventListener("click",closeApply);
 document.getElementById("finish-apply").addEventListener("click",()=>{closeApply();document.getElementById("open-roles").scrollIntoView({behavior:"smooth"})});
 for(const dlg of [els.details,els.apply]){dlg.addEventListener("click",event=>{if(event.target===dlg){dlg.close();document.body.classList.remove("modal-open")}});dlg.addEventListener("close",()=>document.body.classList.remove("modal-open"))}
-document.getElementById("year").textContent=String(new Date().getFullYear());
+const yearElement=document.getElementById("year");if(yearElement)yearElement.textContent=String(new Date().getFullYear());
 updateDepartments();render();
 // Optional external JSON override ONLY when it explicitly declares demonstration
 // mode and DEMO identifiers. No candidate records or secrets are fetched.
