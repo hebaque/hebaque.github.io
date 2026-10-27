@@ -17,3 +17,60 @@
 .journey-actions button:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.journey-progress span{transition:none}}
 @media(max-width:460px){.journey-stage-top{align-items:flex-start;flex-direction:column;gap:3px}.journey-actions{flex-direction:column}}
+
+
+/* RHI careers client presentation: premium photographic hero */
+:root{--brand-primary:#149eec;--brand-primary-hover:#0b8bda;--brand-deep:#071c2f}
+body{background:#fff}
+.site-header{background:#091f34;border-bottom:1px solid rgba(255,255,255,.10)}
+.nav-layout{height:91px}
+.brand img{width:132px;height:72px;object-fit:contain;object-position:left center}
+.site-header nav{color:#ecf6fd;gap:32px}
+.site-header nav a:hover{color:#6bceff}
+.site-header nav .nav-external{border-color:rgba(197,226,245,.31);background:rgba(255,255,255,.045)}
+.site-header nav .nav-external span{color:#5bc7ff}
+.hero{background:linear-gradient(110deg,#061b2e 0%,#06253b 53%,#063456 100%);min-height:660px}
+.hero::before{z-index:0;background:radial-gradient(ellipse at 75% 22%,rgba(30,169,241,.16),transparent 50%),linear-gradient(110deg,rgba(5,25,42,.5),transparent 60%)}
+.hero-grid{z-index:1;opacity:.095}
+.hero-layout{position:relative;min-height:660px;display:flex;align-items:center;gap:0;padding:96px 0 102px}
+.hero-photo{position:absolute;z-index:0;top:0;bottom:0;left:44%;right:calc(-1 * max(36px,(100vw - 1180px)/2));background-image:linear-gradient(0deg,rgba(5,23,40,.75),transparent 34%),linear-gradient(90deg,rgba(5,26,44,.22),rgba(5,26,44,.03)),url("assets/rhi-team.webp");background-size:cover;background-position:center center;background-repeat:no-repeat;opacity:.94;mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.4) 16%,#000 49%);-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.4) 16%,#000 49%);pointer-events:none}
+.hero-copy{position:relative;z-index:2;max-width:670px}
+.eyebrow{color:#a8daf2;letter-spacing:2.5px;font-size:11px}
+.hero h1{font-size:clamp(45px,5vw,77px);line-height:1.07;letter-spacing:-.055em;margin:26px 0 25px;max-width:720px;text-shadow:0 3px 25px rgba(5,24,41,.14)}
+.hero h1 em{color:#3bbcff}
+.hero-copy>p{font-size:17px;line-height:1.85;max-width:545px;color:#c7ddec;margin:0 0 36px}
+.hero-actions{gap:14px}
+.button-primary{background:#139eeb}
+.button-primary:hover{background:#0589d4}
+.value-strip{background:#fff}
+.value-intro h2{max-width:315px}
+.closing-cta{background:linear-gradient(112deg,#09283f,#073b58)}
+.footer{background:#081c2e;border-top:1px solid rgba(255,255,255,.08)}
+.footer-inner{color:#b4cfdf}
+.footer-brand img{width:98px;height:53px;object-fit:contain}
+.footer-brand>span{border-color:rgba(255,255,255,.24)}
+.footer-inner>a{color:#9fd9fb}
+@media(max-width:1030px){
+ .hero-photo{left:33%;right:-60px}
+ .hero-copy{max-width:60%}
+ .hero h1{font-size:clamp(46px,5.2vw,64px)}
+}
+@media(max-width:760px){
+ .nav-layout{height:76px}
+ .brand img{width:101px;height:56px}
+ .site-header nav{gap:12px;font-size:11px}
+ .site-header nav .nav-external{padding:9px 10px}
+ .hero{min-height:620px}
+ .hero-layout{min-height:620px;padding:86px 0 92px;display:flex}
+ .hero-copy{max-width:100%}
+ .hero h1{font-size:clamp(42px,9.4vw,62px);letter-spacing:-.045em}
+ .hero-copy>p{max-width:475px;font-size:14px}
+ .hero-photo{left:20%;right:-65px;opacity:.27;mask-image:linear-gradient(to right,transparent,black 68%);-webkit-mask-image:linear-gradient(to right,transparent,black 68%)}
+ .footer-inner{gap:15px}
+}
+@media(max-width:390px){
+ .site-header nav a:first-child{display:none}
+ .hero h1{font-size:39px}
+ .hero-actions{gap:9px}
+ .hero-actions .button{padding:14px 16px}
+}
