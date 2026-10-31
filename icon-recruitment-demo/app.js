@@ -38,7 +38,8 @@ function stripSafePublishedJobs(data){
   typeof j.title==="string"&&j.title.trim().length>0&&j.title.length<=150 &&
   typeof j.department==="string"&&j.department.length<=80 &&
   typeof j.type==="string"&&j.type.length<=60 &&
-  typeof j.summary==="string"&&j.summary.length>=30&&j.summary.length<=500)
+  typeof j.summary==="string"&&j.summary.trim().length>=30&&
+  j.summary.trim().split(/\s+/u).length<=1500)
  .slice(0,50).map(j=>({
   id:j.id,title:j.title,department:j.department,
   project:"RHI",projectRef:"RHI",
@@ -48,7 +49,15 @@ function stripSafePublishedJobs(data){
 }
 function refreshJobs(){
  const seen=new Set();
- jobs=[...sampleJobs,...publishedJobs].filter(j=>{
+ // Published vacancies precede static presentation roles. Higher permanent
+ // vacancy IDs represent later-created HR-authorized vacancies. This does not
+ // rely on the order returned by the publishing workflow.
+ const newestPublished=[...publishedJobs].sort((a,b)=>{
+  const idA=Number(a.id.replace(/^DEMO-VAC-/,""));
+  const idB=Number(b.id.replace(/^DEMO-VAC-/,""));
+  return idB-idA;
+ });
+ jobs=[...newestPublished,...sampleJobs].filter(j=>{
   if(seen.has(j.id))return false;
   seen.add(j.id);return true;
  });
@@ -64,7 +73,7 @@ function render(){
  els.grid.append(fragment);
 }
 function updateDepartments(){const previouslySelected=els.department.value;const deps=[...new Set(jobs.map(j=>j.department))].sort();els.department.replaceChildren(new Option("All departments","all"));for(const d of deps){els.department.add(new Option(d,d))}els.department.value=deps.includes(previouslySelected)?previouslySelected:"all";}
-function showDetails(job){const filled=job.slots<=0;els.detailsBody.innerHTML=`<h2 id="dialog-title">${escapeHtml(job.title)}</h2><p class="dialog-subtitle">${escapeHtml(job.department)} · ${escapeHtml(job.type)} · ${escapeHtml(job.location)}</p><div class="dialog-facts"><div><small>Project example</small><strong>${escapeHtml(job.project)}</strong></div><div><small>Headcount example</small><strong>${filled?"At approved headcount capacity":escapeHtml(String(job.slots))+" illustrative available slot"+(job.slots===1?"":"s")}</strong></div></div><h3>About this role</h3><p>${escapeHtml(job.summary)}</p><h3>Role focus</h3><div class="dialog-tags">${(job.tags||[]).map(t=>`<span>${escapeHtml(t)}</span>`).join("")}</div><div class="dialog-action"><button type="button" class="button ${filled?"button-muted":"button-primary"}" id="start-demo-apply" ${filled?"disabled":""}>${filled?"Position at capacity":"View application journey →"}</button><button type="button" class="button button-muted" id="dialog-back">Back to positions</button></div><p class="dialog-disclaimer">Applications are not currently being accepted through this page.</p>`;
+function showDetails(job){const filled=job.slots<=0;els.detailsBody.innerHTML=`<h2 id="dialog-title">${escapeHtml(job.title)}</h2><p class="dialog-subtitle">${escapeHtml(job.department)} · ${escapeHtml(job.type)} · ${escapeHtml(job.location)}</p><div class="dialog-facts"><div><small>Project</small><strong>${escapeHtml(job.project)}</strong></div><div><small>Headcount</small><strong>${filled?"At capacity":escapeHtml(String(job.slots))+" available position"+(job.slots===1?"":"s")}</strong></div></div><h3>About this role</h3><p>${escapeHtml(job.summary)}</p><h3>Role focus</h3><div class="dialog-tags">${(job.tags||[]).map(t=>`<span>${escapeHtml(t)}</span>`).join("")}</div><div class="dialog-action"><button type="button" class="button ${filled?"button-muted":"button-primary"}" id="start-demo-apply" ${filled?"disabled":""}>${filled?"Position at capacity":"View application journey →"}</button><button type="button" class="button button-muted" id="dialog-back">Back to positions</button></div><p class="dialog-disclaimer">Applications are not currently being accepted through this page.</p>`;
  els.detailsBody.querySelector("#dialog-back").addEventListener("click",()=>els.details.close());
  if(!filled){els.detailsBody.querySelector("#start-demo-apply").addEventListener("click",()=>openJourneyPreview(job))}
  els.details.showModal();document.body.classList.add("modal-open");
