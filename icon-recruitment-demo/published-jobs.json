@@ -1,6 +1,20 @@
 {
-  "jobs": [],
+  "jobs": [
+    {
+      "id": "DEMO-VAC-36",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "MEP Engineer",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "Department:Engineering / Construction  \r\nLocation: Ain Sokhna Site\r\nEmployment Type:** Full-Time  \r\nExperience: 3–5 Years\r\n\r\nJob Summary\r\n\r\nWe are seeking an experienced MEP Site Engineer to supervise and coordinate Mechanical, Electrical, and Plumbing (MEP) installations on construction sites. The successful candidate will ensure that all MEP works are executed according to approved drawings, technical specifications, quality standards, safety requirements, and project schedules.",
+      "location": "Egypt · Demo",
+      "department": "ENG",
+      "projectRef": "DEMO-ICON"
+    }
+  ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-10-30"
+  "updated": "2026-10-31"
 }
