@@ -12,9 +12,22 @@
       "location": "Egypt · Demo",
       "department": "ENG",
       "projectRef": "DEMO-ICON"
+    },
+    {
+      "id": "DEMO-VAC-41",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Junior HSE Site Engineer",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "Key Responsibilities : \r\n• Site Inspections & Audits: Conduct routine safety walks, site inspections, and audits to identify workplace hazards, unsafe acts, and non-conformities.\r\n• Risk Assessments & Permits: Assist in preparing and monitoring Job Safety Analyses (JSA), Method Statements & Risk Assessments (MSRA), and Permit-to-Work (PTW) systems.\r\n• Training & Inductions: Deliver safety induction training for new personnel, subcontractors, and site visitors, and participate in Toolbox Talks (TBT).\r\n• Incident Reporting: Support incident, accident, and near-miss investigations, helping collect data for Root Cause Analysis (RCA) and tracking corrective action plans.\r\n• PPE & Critical Operations: Monitor daily compliance with Personal Protective Equipment (PPE) guidelines and high-risk activities like working at heights, lifting operations, or excavation.\r\n• Documentation & Metrics: Maintain site HSE logs, inspection records, safety statistics, and assist in drafting weekly and monthly management reports",
+      "location": "Egypt · Demo",
+      "department": "HSE",
+      "projectRef": "DEMO-ICON"
     }
   ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-10-31"
+  "updated": "2026-11-07"
 }
