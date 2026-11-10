@@ -27,6 +27,19 @@
       "projectRef": "DEMO-ICON"
     },
     {
+      "id": "DEMO-VAC-43",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Accountant",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "The Accountant is responsible for controlled financial processing and reconciliations within Finance & Cost Control. The role delivers reliable outcomes through disciplined coordination, accurate records and adherence to agreed technical, service or operating standards.\n\nCore responsibilities:\n1. Validate transactions, supporting approvals and ledger entries before posting.\r\n2. Reconcile allocated accounts and resolve posting differences on schedule.\r\n3. Verify financial transactions and supporting documents against approved accounting procedures.\r\n4. Reconcile financial data, monitor exceptions and prepare management information on time.\r\n5. Coordinate technical or operational interfaces, document decisions and close assigned issues on schedule.\r\n6. Maintain reliable records and verify outputs against approved requirements before handover.",
+      "location": "Egypt · Demo",
+      "department": "FIN",
+      "projectRef": "DEMO-ICON"
+    },
+    {
       "id": "DEMO-VAC-42",
       "tags": [],
       "type": "Temporary",
@@ -42,5 +55,5 @@
   ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-11-08"
+  "updated": "2026-11-10"
 }
