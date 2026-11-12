@@ -40,6 +40,19 @@
       "projectRef": "DEMO-ICON"
     },
     {
+      "id": "DEMO-VAC-45",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Project Manager",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "Plan schedules, budgets, stakeholders and project delivery.",
+      "location": "Egypt · Demo",
+      "department": "OPERATIONS",
+      "projectRef": "DEMO-ICON"
+    },
+    {
       "id": "DEMO-VAC-42",
       "tags": [],
       "type": "Temporary",
