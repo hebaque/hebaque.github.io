@@ -51,22 +51,9 @@
       "location": "Egypt · Demo",
       "department": "OPERATIONS",
       "projectRef": "DEMO-ICON"
-    },
-    {
-      "id": "DEMO-VAC-42",
-      "tags": [],
-      "type": "Temporary",
-      "slots": 1,
-      "title": "Data Specialist",
-      "listed": true,
-      "project": "ICON Demonstration",
-      "summary": "We are seeking a Data Specialist to support data collection, validation, analysis, and reporting. The role involves maintaining accurate records, preparing reports, identifying trends, and supporting data-driven business decisions. The ideal candidate should have strong analytical skills, attention to detail, proficiency in Excel, and experience working with databases and reporting tools. Good communication and problem-solving skills are essential.",
-      "location": "Egypt · Demo",
-      "department": "ENG",
-      "projectRef": "DEMO-ICON"
     }
   ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-11-12"
+  "updated": "2026-11-14"
 }
