@@ -51,9 +51,22 @@
       "location": "Egypt · Demo",
       "department": "OPERATIONS",
       "projectRef": "DEMO-ICON"
+    },
+    {
+      "id": "DEMO-VAC-46",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Head Office Accountant",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "The Head Office Accountant is responsible for controlled financial processing and reconciliations within Finance & Cost Control. The role delivers reliable outcomes through disciplined coordination, accurate records and adherence to agreed technical, service or operating standards.",
+      "location": "Egypt · Demo",
+      "department": "FIN",
+      "projectRef": "DEMO-ICON"
     }
   ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-11-14"
+  "updated": "2026-11-15"
 }
