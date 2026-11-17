@@ -64,9 +64,22 @@
       "location": "Egypt · Demo",
       "department": "FIN",
       "projectRef": "DEMO-ICON"
+    },
+    {
+      "id": "DEMO-VAC-49",
+      "tags": [],
+      "type": "Full-time",
+      "slots": 1,
+      "title": "Site Engineer",
+      "listed": true,
+      "project": "ICON Demonstration",
+      "summary": "Coordinate technical execution for assigned site works. Verify that crews have approved information and help resolve field discrepancies before they affect quality, safety or programme.\n\nCore responsibilities:\n• Check drawings, specifications and site conditions before work starts. Raise technical queries and coordinate responses.\n• Verify setting-out information and record measurements and progress. Coordinate inspections and testing with construction and quality teams.\n• Support quantity verification, material planning and as-built records. Escalate deviations and track corrective work.",
+      "location": "Egypt · Demo",
+      "department": "OPERATIONS",
+      "projectRef": "DEMO-ICON"
     }
   ],
   "mode": "demonstration",
   "source": "ICON Recruitment explicitly authorized demo vacancies",
-  "updated": "2026-11-15"
+  "updated": "2026-11-17"
 }
