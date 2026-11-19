@@ -1,18 +1,8 @@
 "use strict";
-// Public-safe, deliberately fictional demo data. No Supabase keys, session,
-// CV uploads, analytics, forms, storage, or background network calls.
-const FALLBACK_JOBS=[
- {id:"DEMO-PRJ-001-CE",title:"Civil Engineer",department:"Engineering",project:"Project Alpha",projectRef:"DEMO-PRJ-001",location:"Project site · Egypt",type:"Full-time",summary:"Support design coordination, construction quality and technical reporting.",slots:2,tags:["Site engineering","Quality","Documentation"]},
- {id:"DEMO-PRJ-001-PM",title:"Project Manager",department:"Operations",project:"Project Alpha",projectRef:"DEMO-PRJ-001",location:"Project site · Egypt",type:"Full-time",summary:"Plan schedules, budgets, stakeholders and project delivery.",slots:2,tags:["Planning","Stakeholders","Delivery"]},
- {id:"DEMO-PRJ-002-QS",title:"Quantity Surveyor",department:"Commercial",project:"Project Beta",projectRef:"DEMO-PRJ-002",location:"Project site · Egypt",type:"Full-time",summary:"Prepare quantity takeoffs, cost controls and progress reports.",slots:1,tags:["Cost control","Quantity takeoffs","Reporting"]},
- {id:"DEMO-PRJ-002-SS",title:"Site Supervisor",department:"Operations",project:"Project Beta",projectRef:"DEMO-PRJ-002",location:"Project site · Egypt",type:"Full-time",summary:"Coordinate site operations, contractors and safety reporting.",slots:0,tags:["Site management","Safety","Contractors"]},
- {id:"DEMO-PRJ-003-DS",title:"Data Specialist",department:"Engineering",project:"Project Gamma",projectRef:"DEMO-PRJ-003",location:"Project site · Egypt",type:"Temporary",summary:"Maintain operational reports, reconcile data and build dashboards.",slots:1,tags:["Dashboards","Data validation","Reporting"]},
- {id:"DEMO-PRJ-003-PO",title:"Procurement Officer",department:"Procurement",project:"Project Gamma",projectRef:"DEMO-PRJ-003",location:"Project site · Egypt",type:"Full-time",summary:"Manage sourcing requests, supplier comparison and purchase follow-up.",slots:2,tags:["Procurement","Suppliers","Sourcing"]}
-];
+// Public-safe demo listings from the HR-authorized feed.
 const els={grid:document.getElementById("job-grid"),empty:document.getElementById("empty-state"),search:document.getElementById("job-search"),department:document.getElementById("department-filter"),type:document.getElementById("type-filter"),results:document.getElementById("results-label"),total:document.getElementById("total-count"),details:document.getElementById("job-dialog"),detailsBody:document.getElementById("job-detail"),apply:document.getElementById("apply-dialog"),applyRole:document.getElementById("apply-role")};
-let sampleJobs=FALLBACK_JOBS;
-let publishedJobs=[];
-let jobs=[...FALLBACK_JOBS];
+let jobs=[];
+let feedStatus="loading";
 // This demonstration never transmits applicant details or offers live CV upload.
 // Actual secure Tally/n8n intake must be separately enabled after publication
 // authorization, live vacancy-ID checks, and the existing secure workflow cutover.
@@ -24,16 +14,9 @@ const JOURNEY_STAGES=[
 ];
 let journeyStep=0;
 function escapeHtml(input){return String(input??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
-function stripUnsafeJobs(data){
- if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;
- return data.jobs.filter(j=>j&&typeof j.id==="string"&&typeof j.title==="string"&&
-  typeof j.summary==="string"&&typeof j.department==="string"&&
-  typeof j.project==="string"&&typeof j.slots==="number"&&
-  j.id.startsWith("DEMO-")).slice(0,50);
-}
 function stripSafePublishedJobs(data){
  if(data?.mode!=="demonstration"||!Array.isArray(data.jobs))return null;
- return data.jobs.filter(j=>j && typeof j.id==="string" &&
+ return data.jobs.filter(j=>j?.listed===true && typeof j.id==="string" &&
   /^DEMO-VAC-[1-9][0-9]*$/.test(j.id) &&
   typeof j.title==="string"&&j.title.trim().length>0&&j.title.length<=150 &&
   typeof j.department==="string"&&j.department.length<=80 &&
@@ -47,17 +30,15 @@ function stripSafePublishedJobs(data){
   slots:1,listed:true,tags:[],
  }));
 }
-function refreshJobs(){
+function refreshJobs(publishedJobs){
  const seen=new Set();
- // Published vacancies precede static presentation roles. Higher permanent
- // vacancy IDs represent later-created HR-authorized vacancies. This does not
- // rely on the order returned by the publishing workflow.
+ // Higher vacancy IDs represent later-created vacancies.
  const newestPublished=[...publishedJobs].sort((a,b)=>{
   const idA=Number(a.id.replace(/^DEMO-VAC-/,""));
   const idB=Number(b.id.replace(/^DEMO-VAC-/,""));
   return idB-idA;
  });
- jobs=[...newestPublished,...sampleJobs].filter(j=>{
+ jobs=newestPublished.filter(j=>{
   if(seen.has(j.id))return false;
   seen.add(j.id);return true;
  });
@@ -66,8 +47,10 @@ function refreshJobs(){
 function render(){
  const query=els.search.value.trim().toLocaleLowerCase();const dep=els.department.value;const type=els.type.value;
  const visible=jobs.filter(j=>(dep==="all"||j.department===dep)&&(type==="all"||j.type===type)&&[j.title,j.summary,j.department,j.project,j.id,...(j.tags||[])].some(s=>String(s).toLocaleLowerCase().includes(query)));
- els.results.textContent=`Showing ${visible.length} of ${jobs.length} positions`;
- els.total.textContent=String(jobs.length).padStart(2,"0");els.empty.hidden=visible.length!==0;
+ els.results.textContent=feedStatus==="ready"?`Showing ${visible.length} of ${jobs.length} positions`:
+  feedStatus==="loading"?"Loading positions…":"Positions are temporarily unavailable.";
+ els.total.textContent=String(jobs.length).padStart(2,"0");
+ els.empty.hidden=feedStatus!=="ready"||visible.length!==0;
  els.grid.replaceChildren();const fragment=document.createDocumentFragment();
  for(const j of visible){const card=document.createElement("article");card.className="job-card"+(j.slots<=0?" is-filled":"");card.innerHTML=`<div class="job-top"><span class="job-reference">${escapeHtml(j.id.replace(/^DEMO-/, ""))}</span><span class="job-pill ${j.slots<=0?"filled":""}">${j.slots<=0?"STAFFING AT CAPACITY":"ROLE OVERVIEW"}</span></div><h3>${escapeHtml(j.title)}</h3><div class="job-meta"><span>${escapeHtml(j.department)}</span><span class="divider-dot" aria-hidden="true">●</span><span>${escapeHtml(j.type)}</span></div><p>${escapeHtml(j.summary)}</p><div class="job-bottom"><span>${escapeHtml(j.project)}</span><button type="button" data-job-id="${escapeHtml(j.id)}" aria-label="View ${escapeHtml(j.title)} role details">View details <span aria-hidden="true">→</span></button></div>`;fragment.append(card)}
  els.grid.append(fragment);
@@ -115,18 +98,19 @@ document.getElementById("finish-apply").addEventListener("click",()=>{closeApply
 for(const dlg of [els.details,els.apply]){dlg.addEventListener("click",event=>{if(event.target===dlg){dlg.close();document.body.classList.remove("modal-open")}});dlg.addEventListener("close",()=>document.body.classList.remove("modal-open"))}
 const yearElement=document.getElementById("year");if(yearElement)yearElement.textContent=String(new Date().getFullYear());
 updateDepartments();render();
-// Optional external JSON override ONLY when it explicitly declares demonstration
-// mode and DEMO identifiers. No candidate records or secrets are fetched.
-fetch("jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
- const safe=stripUnsafeJobs(data);
- if(safe){sampleJobs=safe;refreshJobs()}
-}).catch(()=>{});
-/* Separate, opt-in HR-approved sanitized feed. No direct Supabase data/API keys.
-   Zero jobs means no HR-authorized demo jobs, leaving synthetic sample examples visible. */
-fetch("published-jobs.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(data=>{
+// The sanitized feed is the source for all active listings.
+fetch("published-jobs.json",{cache:"no-store"}).then(r=>{
+ if(!r.ok)throw new Error("Careers feed unavailable");
+ return r.json();
+}).then(data=>{
  const safe=stripSafePublishedJobs(data);
- if(safe){publishedJobs=safe;refreshJobs()}
-}).catch(()=>{});
+ if(!safe)throw new Error("Invalid careers feed");
+ feedStatus="ready";
+ refreshJobs(safe);
+}).catch(()=>{
+ feedStatus="unavailable";
+ render();
+});
 // Optional presentation branding. Only local image assets and CSS hex colors
 // are accepted; this file cannot provide network targets or applicant intake.
 fetch("branding.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(brand=>{

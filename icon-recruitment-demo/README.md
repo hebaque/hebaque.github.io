@@ -5,7 +5,7 @@ This folder hosts a **fictional demonstration** careers page on GitHub Pages. It
 ## Present structure
 
 - `index.html`, `styles.css`, `app.js`: static careers listing, job details, and a click-through four-stage **simulation** of candidate intake, private CV receipt and storage, AI-assisted screening, and recruiter-controlled decisions. No form submission, personal data collection, CV upload, authentication token, or Supabase credentials are present.
-- `jobs.json`: explicitly fictional sample roles with `DEMO-PRJ-*` identifiers. These do not map to real vacancy IDs.
+- `jobs.json`: explicitly fictional sample roles with `DEMO-PRJ-*` identifiers. Retained as reference data outside the active listing.
 - `published-jobs.json`: separate sanitized, explicitly authorized HR-demo-publication feed. Only `DEMO-VAC-*` identifiers appear. The n8n workflow `ICON Recruitment — Public-Safe Demo Vacancy Publisher` refreshes this file, reads back the deployed page and acknowledges only verified demo publication state.
 - `branding.json`: optional presentation-only branding profile. Changing this file does **not** change the n8n publisher or the database. Sample ICON values preserve the current look.
 
@@ -50,4 +50,4 @@ The GitHub-hosted demo site and its publisher can stay available for sales even 
 
 ## Demo publishing caveat
 
-As of 22 October 2026, `published-jobs.json` contains an **empty** jobs array, and the synthetic sample data in `jobs.json` remains visible. Approval or queueing of new demo publications is a business action, not an automatic consequence of editing this folder.
+The active listing uses only the HR-authorized feed. An empty feed shows zero positions. A failed or invalid feed shows that positions are temporarily unavailable. The existing n8n worker records a failed execution when the live feed cannot be verified and retries pending changes on its next scheduled run.
